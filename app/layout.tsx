@@ -1,10 +1,19 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Poppins, Kamtumruy_Pro } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const poppins = Poppins({ 
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins"
+});
+
+const kamtumruyPro = Kamtumruy_Pro({ 
+  subsets: ["khmer"],
+  weight: ["400", "700"],
+  variable: "--font-kamtumruy"
+});
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -35,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${poppins.variable} ${kamtumruyPro.variable}`}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />
