@@ -6,61 +6,63 @@ import { FileText, ImageIcon, FileType, ArrowRightLeft, QrCode } from "lucide-re
 import { useState } from "react"
 import { Converter } from "@/components/converter"
 import { QRGenerator } from "@/components/qr-generator"
-
-const features = [
-  {
-    icon: FileType,
-    title: "Word to PDF",
-    description: "Convert Word documents to PDF format while preserving formatting, fonts, and layout perfectly.",
-    type: "word-to-pdf" as const,
-    color: "from-blue-500 to-cyan-500",
-    bgColor: "bg-blue-500/10",
-    category: "converter",
-  },
-  {
-    icon: FileText,
-    title: "PDF to Word",
-    description: "Extract text and formatting from PDFs into editable Word documents with high accuracy.",
-    type: "pdf-to-word" as const,
-    color: "from-purple-500 to-pink-500",
-    bgColor: "bg-purple-500/10",
-    category: "converter",
-  },
-  {
-    icon: ImageIcon,
-    title: "Image to Word",
-    description: "Transform scanned documents and images into editable Word files using advanced OCR technology.",
-    type: "image-to-word" as const,
-    color: "from-green-500 to-emerald-500",
-    bgColor: "bg-green-500/10",
-    category: "converter",
-  },
-  {
-    icon: ArrowRightLeft,
-    title: "Image to PDF",
-    description: "Convert images to professional PDF documents with customizable settings and compression.",
-    type: "image-to-pdf" as const,
-    color: "from-orange-500 to-red-500",
-    bgColor: "bg-orange-500/10",
-    category: "converter",
-  },
-  {
-    icon: QrCode,
-    title: "QR Code Generator",
-    description: "Create custom QR codes with optional logo placement in the center for branding purposes.",
-    type: "qr-generator" as const,
-    color: "from-cyan-500 to-blue-500",
-    bgColor: "bg-cyan-500/10",
-    category: "qr",
-  },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function Features() {
+  const { t } = useLanguage()
   const [converterOpen, setConverterOpen] = useState(false)
   const [qrOpen, setQrOpen] = useState(false)
   const [selectedType, setSelectedType] = useState<"word-to-pdf" | "pdf-to-word" | "image-to-word" | "image-to-pdf">(
     "word-to-pdf",
   )
+
+  const features = [
+    {
+      icon: FileType,
+      title: t('features.word-to-pdf'),
+      description: t('features.word-to-pdf-desc'),
+      type: "word-to-pdf" as const,
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "bg-blue-500/10",
+      category: "converter",
+    },
+    {
+      icon: FileText,
+      title: t('features.pdf-to-word'),
+      description: t('features.pdf-to-word-desc'),
+      type: "pdf-to-word" as const,
+      color: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-500/10",
+      category: "converter",
+    },
+    {
+      icon: ImageIcon,
+      title: t('features.image-to-word'),
+      description: t('features.image-to-word-desc'),
+      type: "image-to-word" as const,
+      color: "from-green-500 to-emerald-500",
+      bgColor: "bg-green-500/10",
+      category: "converter",
+    },
+    {
+      icon: ArrowRightLeft,
+      title: t('features.image-to-pdf'),
+      description: t('features.image-to-pdf-desc'),
+      type: "image-to-pdf" as const,
+      color: "from-orange-500 to-red-500",
+      bgColor: "bg-orange-500/10",
+      category: "converter",
+    },
+    {
+      icon: QrCode,
+      title: t('features.qr-code'),
+      description: t('features.qr-code-desc'),
+      type: "qr-generator" as const,
+      color: "from-cyan-500 to-blue-500",
+      bgColor: "bg-cyan-500/10",
+      category: "qr",
+    },
+  ]
 
   const handleTryNow = (feature: (typeof features)[0]) => {
     if (feature.category === "converter") {
@@ -77,13 +79,12 @@ export function Features() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-balance mb-4">
-              Powerful{" "}
+              {t('features.title')}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                conversion features
               </span>
             </h2>
             <p className="text-lg text-muted-foreground text-balance max-w-2xl mx-auto">
-              Everything you need to convert documents between formats with precision and speed
+              {t('features.subtitle')}
             </p>
           </div>
 
@@ -106,7 +107,7 @@ export function Features() {
                   className="w-full mt-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50 transition-all bg-transparent"
                   onClick={() => handleTryNow(feature)}
                 >
-                  Try now
+                  {t('features.word-to-pdf') ? 'Try now' : 'Try now'}
                 </Button>
               </Card>
             ))}
