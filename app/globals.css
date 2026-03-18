@@ -4,74 +4,83 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.15 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0 0);
-  --primary: oklch(0.55 0.25 264);
+  /* Khmer-inspired warm earth tones inspired by Cambodian temples */
+  --background: oklch(0.97 0.01 40);
+  --foreground: oklch(0.2 0.02 30);
+  --card: oklch(0.99 0.02 45);
+  --card-foreground: oklch(0.18 0.02 30);
+  --popover: oklch(0.99 0.02 45);
+  --popover-foreground: oklch(0.18 0.02 30);
+  --primary: oklch(0.6 0.18 30);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.96 0.01 264);
+  --secondary: oklch(0.7 0.12 50);
   --secondary-foreground: oklch(0.15 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.5 0 0);
-  --accent: oklch(0.65 0.22 310);
+  --muted: oklch(0.94 0.02 40);
+  --muted-foreground: oklch(0.5 0.02 40);
+  --accent: oklch(0.65 0.15 25);
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: oklch(0.55 0.25 264);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --border: oklch(0.88 0.02 40);
+  --input: oklch(0.95 0.02 45);
+  --ring: oklch(0.6 0.18 30);
+  --chart-1: oklch(0.65 0.18 30);
+  --chart-2: oklch(0.55 0.15 35);
+  --chart-3: oklch(0.75 0.12 50);
+  --chart-4: oklch(0.7 0.15 45);
+  --chart-5: oklch(0.6 0.16 25);
   --radius: 0.75rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.55 0.25 264);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.98 0.01 40);
+  --sidebar-foreground: oklch(0.2 0.02 30);
+  --sidebar-primary: oklch(0.6 0.18 30);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.96 0.01 40);
+  --sidebar-accent-foreground: oklch(0.2 0.02 30);
+  --sidebar-border: oklch(0.9 0.02 40);
+  --sidebar-ring: oklch(0.7 0.1 40);
+  /* Khmer gold and earth accents */
+  --khmer-gold: oklch(0.72 0.15 60);
+  --khmer-earth: oklch(0.55 0.12 35);
+  --khmer-teal: oklch(0.6 0.12 210);
 }
 
 .dark {
-  --background: oklch(0.15 0 0);
-  --foreground: oklch(0.99 0 0);
-  --card: oklch(0.18 0 0);
-  --card-foreground: oklch(0.99 0 0);
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(0.99 0 0);
-  --primary: oklch(0.65 0.25 264);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.25 0.01 264);
-  --secondary-foreground: oklch(0.99 0 0);
-  --muted: oklch(0.25 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.7 0.22 310);
-  --accent-foreground: oklch(0.99 0 0);
+  /* Dark mode with warm Khmer-inspired tones */
+  --background: oklch(0.2 0.01 30);
+  --foreground: oklch(0.95 0.01 45);
+  --card: oklch(0.25 0.02 30);
+  --card-foreground: oklch(0.95 0.01 45);
+  --popover: oklch(0.25 0.02 30);
+  --popover-foreground: oklch(0.95 0.01 45);
+  --primary: oklch(0.7 0.18 30);
+  --primary-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.35 0.12 50);
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.35 0.02 30);
+  --muted-foreground: oklch(0.65 0.02 40);
+  --accent: oklch(0.75 0.15 25);
+  --accent-foreground: oklch(0.15 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.25 0 0);
-  --input: oklch(0.25 0 0);
-  --ring: oklch(0.7 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.65 0.25 264);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  --border: oklch(0.35 0.02 30);
+  --input: oklch(0.3 0.02 30);
+  --ring: oklch(0.7 0.18 30);
+  --chart-1: oklch(0.7 0.18 30);
+  --chart-2: oklch(0.6 0.15 35);
+  --chart-3: oklch(0.8 0.12 50);
+  --chart-4: oklch(0.75 0.15 45);
+  --chart-5: oklch(0.7 0.16 25);
+  --sidebar: oklch(0.22 0.01 30);
+  --sidebar-foreground: oklch(0.95 0.01 45);
+  --sidebar-primary: oklch(0.7 0.18 30);
+  --sidebar-primary-foreground: oklch(0.95 0.01 45);
+  --sidebar-accent: oklch(0.32 0.02 30);
+  --sidebar-accent-foreground: oklch(0.95 0.01 45);
+  --sidebar-border: oklch(0.35 0.02 30);
+  --sidebar-ring: oklch(0.75 0.1 40);
+  --khmer-gold: oklch(0.8 0.15 60);
+  --khmer-earth: oklch(0.65 0.12 35);
+  --khmer-teal: oklch(0.7 0.12 210);
 }
 
 @theme inline {
@@ -145,10 +154,48 @@
   }
 }
 
+@keyframes temple-shine {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-temple-shine {
+  animation: temple-shine 3s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 10s linear infinite;
+}
+
+/* Khmer decorative patterns */
+.khmer-pattern {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(var(--khmer-gold), 0.03) 10px,
+    rgba(var(--khmer-gold), 0.03) 20px
+  );
 }

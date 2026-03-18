@@ -4,40 +4,48 @@ import { FileText } from "lucide-react"
 
 export function Header() {
   return (
-    <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+    <header className="border-b border-border bg-gradient-to-r from-background via-background to-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <FileText className="h-6 w-6" />
-            <span className="text-xl font-bold">KD OCR</span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative p-2 bg-gradient-to-br from-primary to-accent rounded-lg shadow-md group-hover:shadow-lg transition-all">
+              <FileText className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <div className="flex flex-col gap-0">
+              <span className="text-lg font-bold text-foreground">KD OCR</span>
+              <span className="text-xs text-muted-foreground font-medium">ខ្មែរ</span>
+            </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-8">
             <Link
               href="#features"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
             >
               Features
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all" />
             </Link>
             <Link
               href="#how-it-works"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
             >
               How It Works
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all" />
             </Link>
             <Link
               href="#pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
             >
               Pricing
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all" />
             </Link>
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="hidden sm:inline-flex">
+            <Button variant="ghost" className="hidden sm:inline-flex text-sm hover:text-primary">
               Log in
             </Button>
-            <Button>Try for free</Button>
+            <Button className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all">Try for free</Button>
           </div>
         </div>
       </div>
