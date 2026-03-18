@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Poppins, Kamtumruy_Pro } from 'next/font/google'
+import { Poppins, Battambang } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -9,10 +9,10 @@ const poppins = Poppins({
   variable: "--font-poppins"
 });
 
-const kamtumruyPro = Kamtumruy_Pro({ 
+const battambang = Battambang({ 
   subsets: ["khmer"],
   weight: ["400", "700"],
-  variable: "--font-kamtumruy"
+  variable: "--font-khmer"
 });
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${kamtumruyPro.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${battambang.variable}`}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />

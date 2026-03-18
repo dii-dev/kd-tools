@@ -85,7 +85,7 @@
 
 @theme inline {
   --font-sans: var(--font-poppins), 'Poppins', 'Poppins Fallback', sans-serif;
-  --font-khmer: var(--font-kamtumruy), 'Kamtumruy Pro', 'Kamtumruy Pro Fallback', sans-serif;
+  --font-khmer: var(--font-khmer), 'Battambang', 'Battambang Fallback', sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
