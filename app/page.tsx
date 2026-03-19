@@ -1,21 +1,5 @@
-import { Header } from "@/components/header"
-import { Hero } from "@/components/hero"
-import { Features } from "@/components/features"
-import { HowItWorks } from "@/components/how-it-works"
-import { CTA } from "@/components/cta"
-import { Donation } from "@/components/donation"
-import { Footer } from "@/components/footer"
+import { PageWrapper } from "@/components/page-wrapper"
 
 export default function Home() {
-  return (
-    <main className="min-h-screen">
-      <Header />
-      <Hero />
-      <Features />
-      <HowItWorks />
-      <CTA />
-      <Donation />
-      <Footer />
-    </main>
-  )
+  return <PageWrapper />
 }
