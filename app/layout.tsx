@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Poppins, Battambang } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { LanguageProvider } from '@/lib/language-context'
 import './globals.css'
 
 const poppins = Poppins({ 
@@ -46,7 +47,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${battambang.variable}`}>
       <body className="font-sans antialiased">
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
         <Analytics />
       </body>
     </html>
