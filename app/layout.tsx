@@ -1,7 +1,18 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Poppins, Battambang } from 'next/font/google'
 import { RootClientWrapper } from '@/components/root-client-wrapper'
 import './globals.css'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1a1a' },
+  ],
+}
 
 const poppins = Poppins({ 
   subsets: ["latin"],
@@ -16,18 +27,66 @@ const battambang = Battambang({
 });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'KD OCR - Document Converter & QR Code Generator',
+  description: 'Convert documents between formats instantly with KD OCR. Support for Word to PDF, PDF to Word, Image to Word, Image to PDF, and QR code generation with custom logos. Fast, accurate OCR technology for Khmer and English documents.',
+  keywords: ['OCR', 'document converter', 'PDF converter', 'Word converter', 'image to PDF', 'QR code generator', 'Khmer OCR', 'document conversion'],
+  authors: [{ name: 'KD OCR' }],
+  creator: 'KD OCR',
+  publisher: 'KD OCR',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://kdocr.com',
+    languages: {
+      en: 'https://kdocr.com/en',
+      'km': 'https://kdocr.com/km',
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://kdocr.com',
+    siteName: 'KD OCR',
+    title: 'KD OCR - Document Converter & QR Code Generator',
+    description: 'Convert documents and generate custom QR codes instantly with advanced OCR technology',
+    images: [
+      {
+        url: 'https://kdocr.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'KD OCR - Document Conversion Tool',
+        type: 'image/png',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'KD OCR - Document Converter & QR Code Generator',
+    description: 'Convert documents between formats instantly with KD OCR',
+    creator: '@KDOCR',
+    images: ['https://kdocr.com/twitter-image.png'],
+  },
+  manifest: '/manifest.json',
   icons: {
     icon: [
       {
         url: '/icon-light-32x32.png',
         media: '(prefers-color-scheme: light)',
+        sizes: '32x32',
       },
       {
         url: '/icon-dark-32x32.png',
         media: '(prefers-color-scheme: dark)',
+        sizes: '32x32',
       },
       {
         url: '/icon.svg',
@@ -35,7 +94,9 @@ export const metadata: Metadata = {
       },
     ],
     apple: '/apple-icon.png',
+    shortcut: '/favicon.ico',
   },
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
