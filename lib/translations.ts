@@ -49,6 +49,13 @@ export const translations = {
     'donation.subtitle': 'Help us improve KD OCR and bring better document conversion tools to everyone',
     'donation.button': 'Donate via ABA Payway',
 
+    // JSON Tools
+    'json-tools.title': 'JSON Tools',
+    'json-tools.pretty': 'JSON Pretty',
+    'json-tools.diff': 'JSON Diff',
+    'json-tools.format': 'JSON Format',
+    'json-tools.string': 'JSON String',
+
     // Footer
     'footer.about': 'About',
     'footer.contact': 'Contact',
@@ -150,6 +157,13 @@ export const translations = {
     'qr.generating': 'កំពុងបង្កើត...',
     'qr.download': 'ទាញយក QR Code',
     'qr.success': 'QR code ដែលមានឡូហ្គោផ្ទាល់ខ្លួនរបស់អ្នកត្រៀមរួចហើយ!',
+
+    // JSON Tools
+    'json-tools.title': 'ឧបករណ៍ JSON',
+    'json-tools.pretty': 'JSON Pretty',
+    'json-tools.diff': 'ការប្រៀបធៀប JSON',
+    'json-tools.format': 'ទម្រង់ JSON',
+    'json-tools.string': 'JSON String',
   },
 } as const
 

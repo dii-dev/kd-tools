@@ -17,24 +17,24 @@ export function Header() {
               <FileText className="h-5 w-5 text-primary-foreground" />
             </div>
             <div className="flex flex-col gap-0">
-              <span className="text-lg font-bold text-foreground">KD OCR</span>
+              <span className="text-lg font-bold text-foreground">KD Tools</span>
               <span className="text-xs text-muted-foreground font-medium">ខ្មែរ</span>
             </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
             <Link
-              href="#features"
+              href="/"
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
             >
-              {t('header.features')}
+              OCR Tools
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all" />
             </Link>
             <Link
-              href="#how-it-works"
+              href="/tools"
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
             >
-              {t('header.how-it-works')}
+              Converter Tools
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all" />
             </Link>
             <Link

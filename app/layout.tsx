@@ -39,12 +39,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'KD OCR - Document Converter & QR Code Generator',
-  description: 'Convert documents between formats instantly with KD OCR. Support for Word to PDF, PDF to Word, Image to Word, Image to PDF, and QR code generation with custom logos. Fast, accurate OCR technology for Khmer and English documents.',
-  keywords: ['OCR', 'document converter', 'PDF converter', 'Word converter', 'image to PDF', 'QR code generator', 'Khmer OCR', 'document conversion'],
-  authors: [{ name: 'KD OCR' }],
-  creator: 'KD OCR',
-  publisher: 'KD OCR',
+  title: 'KD Tools - OCR & Document Converter',
+  description: 'All-in-one tools platform: OCR tools (Word to PDF, PDF to Word, Image conversions), JSON converters (Pretty, Format, Diff, String), and QR code generator. Fast, accurate technology supporting Khmer and English.',
+  keywords: ['tools', 'OCR', 'document converter', 'PDF converter', 'JSON formatter', 'QR code generator', 'JSON diff', 'Khmer tools', 'online converter'],
+  authors: [{ name: 'KD Tools' }],
+  creator: 'KD Tools',
+  publisher: 'KD Tools',
   robots: {
     index: true,
     follow: true,
