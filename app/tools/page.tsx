@@ -162,29 +162,4 @@ export default function ToolsPage() {
       <Footer />
     </>
   )
-            })}
-          </div>
-
-          {/* Features Section */}
-          <div className="mt-20 p-8 bg-secondary/50 rounded-lg border border-border">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Why Use KD Converter?</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Fast & Reliable</h3>
-                <p className="text-muted-foreground text-sm">Instant processing with accurate results for all your conversion needs.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Multilingual Support</h3>
-                <p className="text-muted-foreground text-sm">Full support for Khmer and English languages with cultural design.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Privacy First</h3>
-                <p className="text-muted-foreground text-sm">All conversions happen locally in your browser. No data is stored.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  )
 }
