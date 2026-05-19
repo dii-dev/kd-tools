@@ -77,18 +77,19 @@ export function Features() {
     <>
       <section id="features" className="py-20 md:py-32 bg-gradient-to-b from-background via-secondary/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* OCR Tools Section */}
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-balance mb-4">
-              {t('features.title')}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                OCR Tools
               </span>
             </h2>
             <p className="text-lg text-muted-foreground text-balance max-w-2xl mx-auto">
-              {t('features.subtitle')}
+              Convert documents between multiple formats with advanced OCR technology
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-20">
             {features.map((feature, index) => (
               <Card
                 key={index}
@@ -107,10 +108,31 @@ export function Features() {
                   className="w-full mt-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50 transition-all bg-transparent"
                   onClick={() => handleTryNow(feature)}
                 >
-                  {t('features.word-to-pdf') ? 'Try now' : 'Try now'}
+                  Try now
                 </Button>
               </Card>
             ))}
+          </div>
+
+          {/* Converter Tools Section */}
+          <div className="text-center mb-16 pt-20 border-t border-border">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-balance mb-4">
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Converter Tools
+              </span>
+            </h2>
+            <p className="text-lg text-muted-foreground text-balance max-w-2xl mx-auto">
+              JSON formatting, comparison, and conversion tools for developers
+            </p>
+          </div>
+
+          <div className="text-center">
+            <p className="text-lg text-muted-foreground mb-8">
+              Explore our complete suite of JSON tools and more at <a href="/tools" className="text-primary hover:underline font-semibold">Converter Tools</a>
+            </p>
+            <Button size="lg" asChild className="bg-gradient-to-r from-primary to-accent hover:opacity-90">
+              <a href="/tools">View All Converter Tools</a>
+            </Button>
           </div>
         </div>
       </section>

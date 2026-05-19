@@ -37,15 +37,14 @@ export function Hero() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-              {t('hero.title')}{" "}
+              All Your Converting Needs in{" "}
               <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-temple-shine">
-                {t('hero.title-highlight')}
+                One Place
               </span>
-              {" "}with precision
             </h1>
 
             <p className="text-lg sm:text-xl text-muted-foreground text-balance mb-10 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-              {t('hero.subtitle')}
+              Convert documents with OCR technology, manipulate JSON, and generate QR codes. All in one powerful suite of tools for developers and professionals.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
@@ -54,7 +53,7 @@ export function Hero() {
                 className="w-full sm:w-auto text-base bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-primary/25"
                 onClick={() => setConverterOpen(true)}
               >
-                {t('hero.cta-primary')}
+                Start Converting
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button
@@ -62,12 +61,12 @@ export function Hero() {
                 variant="outline"
                 className="w-full sm:w-auto text-base border-primary/30 hover:bg-primary/5 hover:border-primary/50 transition-all hover:scale-105 bg-transparent"
               >
-                {t('hero.cta-secondary')}
+                Explore All Tools
               </Button>
             </div>
 
             <p className="text-sm text-muted-foreground mt-6 animate-in fade-in duration-700 delay-500">
-              {t('hero.footer-text')}
+              No credit card required • Open source & Cambodian-built
             </p>
           </div>
         </div>
