@@ -1,6 +1,5 @@
 'use client'
 
-import { LanguageProvider } from "@/lib/language-context"
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { Features } from "@/components/features"
@@ -11,16 +10,14 @@ import { Footer } from "@/components/footer"
 
 export function PageWrapper() {
   return (
-    <LanguageProvider>
-      <main className="min-h-screen">
-        <Header />
-        <Hero />
-        <Features />
-        <HowItWorks />
-        <CTA />
-        <Donation />
-        <Footer />
-      </main>
-    </LanguageProvider>
+    <main className="min-h-screen">
+      <Header />
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <CTA />
+      <Donation />
+      <Footer />
+    </main>
   )
 }

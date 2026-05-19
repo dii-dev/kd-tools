@@ -12,7 +12,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('en')
+  const [language, setLanguageState] = useState<Language>('km')
   const [mounted, setMounted] = useState(false)
 
   // Load language from localStorage on mount
@@ -21,12 +21,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'km')) {
       setLanguageState(savedLanguage)
     }
+    document.documentElement.lang = savedLanguage === 'en' || savedLanguage === 'km' ? savedLanguage : 'km'
     setMounted(true)
   }, [])
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang)
     localStorage.setItem('language', lang)
+    document.documentElement.lang = lang
   }
 
   const t = (key: TranslationKey): string => {
@@ -50,9 +52,9 @@ export function useLanguage() {
   if (context === undefined) {
     // Return a safe default that won't crash
     return {
-      language: 'en' as Language,
+      language: 'km' as Language,
       setLanguage: () => {},
-      t: (key: TranslationKey) => key,
+      t: (key: TranslationKey) => translations.km[key] || key,
     }
   }
   return context

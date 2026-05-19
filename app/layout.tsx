@@ -1,22 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Poppins } from 'next/font/google'
-import localFont from 'next/font/local'
+import { Kantumruy_Pro, Poppins } from 'next/font/google'
 import { RootClientWrapper } from '@/components/root-client-wrapper'
 import './globals.css'
 
-const kantumruyPro = localFont({
-  src: [
-    {
-      path: '../../public/fonts/KantumruyPro-Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/KantumruyPro-Bold.ttf',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
+const kantumruyPro = Kantumruy_Pro({
+  subsets: ['khmer', 'latin'],
+  weight: ['400', '700'],
   variable: '--font-khmer',
   display: 'swap',
 })
@@ -117,7 +106,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${kantumruyPro.variable}`}>
+    <html lang="km" suppressHydrationWarning className={`${poppins.variable} ${kantumruyPro.variable}`}>
       <body className="font-sans antialiased">
         <RootClientWrapper>
           {children}

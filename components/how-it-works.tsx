@@ -1,31 +1,35 @@
-import { Upload, Zap, Download } from "lucide-react"
+"use client"
 
-const steps = [
-  {
-    icon: Upload,
-    title: "Upload your file",
-    description: "Drag and drop or select your document from your device. We support all major file formats.",
-  },
-  {
-    icon: Zap,
-    title: "Instant conversion",
-    description: "Our advanced OCR engine processes your document in seconds with industry-leading accuracy.",
-  },
-  {
-    icon: Download,
-    title: "Download result",
-    description: "Get your converted file immediately. All conversions maintain original quality and formatting.",
-  },
-]
+import { Upload, Zap, Download } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 export function HowItWorks() {
+  const { t } = useLanguage()
+  const steps = [
+    {
+      icon: Upload,
+      title: t('how.step1.title'),
+      description: t('how.step1.desc'),
+    },
+    {
+      icon: Zap,
+      title: t('how.step2.title'),
+      description: t('how.step2.desc'),
+    },
+    {
+      icon: Download,
+      title: t('how.step3.title'),
+      description: t('how.step3.desc'),
+    },
+  ]
+
   return (
     <section id="how-it-works" className="py-20 md:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-balance mb-4">How it works</h2>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-balance mb-4">{t('how.title')}</h2>
           <p className="text-lg text-muted-foreground text-balance max-w-2xl mx-auto">
-            Convert your documents in three simple steps
+            {t('how.subtitle')}
           </p>
         </div>
 

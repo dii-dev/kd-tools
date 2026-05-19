@@ -1,6 +1,126 @@
+function parseFlexibleJsonInput(jsonString: string): unknown {
+  const input = jsonString.trim()
+  const attempts: string[] = [input]
+
+  const looksLikePropertyFragment =
+    /^"[^"]+"\s*:/.test(input) || /^'[^']+'\s*:/.test(input)
+
+  if (looksLikePropertyFragment) {
+    attempts.push(`{${input}}`)
+  }
+
+  const decodedInlineEscapes = input
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\\r/g, "\r")
+    .replace(/\\t/g, "\t")
+    .replace(/\\"/g, '"')
+    .replace(/\\\\/g, "\\")
+
+  if (decodedInlineEscapes !== input) {
+    attempts.push(decodedInlineEscapes)
+    if (looksLikePropertyFragment) {
+      attempts.push(`{${decodedInlineEscapes}}`)
+    }
+  }
+
+  if (
+    input &&
+    !((input.startsWith('"') && input.endsWith('"')) || (input.startsWith("'") && input.endsWith("'"))) &&
+    /\\[nrt"\\/]/.test(input)
+  ) {
+    attempts.push(`"${input.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`)
+  }
+
+  let lastError: unknown
+
+  for (const attempt of attempts) {
+    try {
+      let parsed = JSON.parse(attempt)
+
+      while (typeof parsed === "string") {
+        const nested = parsed.trim()
+        if (!(nested.startsWith("{") || nested.startsWith("["))) break
+        parsed = JSON.parse(nested)
+      }
+
+      return parsed
+    } catch (error) {
+      lastError = error
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("Invalid JSON")
+}
+
+function normalizeNestedJsonStrings(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeNestedJsonStrings(item))
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [key, normalizeNestedJsonStrings(nestedValue)]),
+    )
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim()
+    const looksJsonLike =
+      trimmed.startsWith("{") ||
+      trimmed.startsWith("[") ||
+      trimmed.startsWith('"{') ||
+      trimmed.startsWith('"[') ||
+      /\\[nrt"\\/]/.test(trimmed)
+
+    if (looksJsonLike) {
+      try {
+        return normalizeNestedJsonStrings(parseFlexibleJsonInput(trimmed))
+      } catch {
+        return value
+      }
+    }
+  }
+
+  return value
+}
+
+function minifyNestedJsonStringsByKey(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => minifyNestedJsonStringsByKey(item))
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [key, minifyNestedJsonStringsByKey(nestedValue)]),
+    )
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim()
+    const looksJsonLike =
+      trimmed.startsWith("{") ||
+      trimmed.startsWith("[") ||
+      trimmed.startsWith('"{') ||
+      trimmed.startsWith('"[') ||
+      /\\[nrt"\\/]/.test(trimmed)
+
+    if (looksJsonLike) {
+      try {
+        const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(trimmed))
+        return JSON.stringify(parsed)
+      } catch {
+        return value
+      }
+    }
+  }
+
+  return value
+}
+
 export function jsonPretty(jsonString: string): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = JSON.parse(jsonString)
+    const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
     const pretty = JSON.stringify(parsed, null, 2)
     return { result: pretty, error: null }
   } catch (err) {
@@ -10,7 +130,7 @@ export function jsonPretty(jsonString: string): { result: string; error: null } 
 
 export function jsonMinify(jsonString: string): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = JSON.parse(jsonString)
+    const parsed = minifyNestedJsonStringsByKey(parseFlexibleJsonInput(jsonString))
     const minified = JSON.stringify(parsed)
     return { result: minified, error: null }
   } catch (err) {
@@ -20,7 +140,7 @@ export function jsonMinify(jsonString: string): { result: string; error: null } 
 
 export function jsonFormat(jsonString: string, indent: number = 2): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = JSON.parse(jsonString)
+    const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
     const formatted = JSON.stringify(parsed, null, indent)
     return { result: formatted, error: null }
   } catch (err) {
@@ -30,7 +150,7 @@ export function jsonFormat(jsonString: string, indent: number = 2): { result: st
 
 export function jsonPrettyString(jsonString: string): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = JSON.parse(jsonString)
+    const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
     let result = ''
     const indent = (level: number) => '  '.repeat(level)
 
@@ -77,8 +197,8 @@ export function jsonPrettyString(jsonString: string): { result: string; error: n
 
 export function jsonDiff(json1: string, json2: string): { result: string; error: null } | { result: null; error: string } {
   try {
-    const obj1 = JSON.parse(json1)
-    const obj2 = JSON.parse(json2)
+    const obj1 = normalizeNestedJsonStrings(parseFlexibleJsonInput(json1))
+    const obj2 = normalizeNestedJsonStrings(parseFlexibleJsonInput(json2))
 
     const changes: string[] = []
 
@@ -114,7 +234,7 @@ export function jsonDiff(json1: string, json2: string): { result: string; error:
 
 export function validateJSON(jsonString: string): { valid: boolean; error: string | null } {
   try {
-    JSON.parse(jsonString)
+    parseFlexibleJsonInput(jsonString)
     return { valid: true, error: null }
   } catch (err) {
     return { valid: false, error: err instanceof Error ? err.message : 'Invalid JSON' }

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { JsonEditor } from '@/components/json-editor'
+import { JsonHighlightedView } from '@/components/json-highlighted-view'
+import { ToolsBackButton } from '@/components/tools-back-button'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/lib/language-context'
 import { jsonPrettyString } from '@/lib/json-utils'
@@ -26,61 +28,53 @@ export default function JsonPrettyStringPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              JSON Pretty String
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Convert JSON strings to a readable format with proper indentation and formatting
-            </p>
+          <ToolsBackButton />
+          <div className="mb-8 sm:mb-10 md:mb-12">
+            <h1 className="mb-3 text-3xl font-bold text-foreground sm:text-4xl md:text-5xl">{t('json.string.title')}</h1>
+            <p className="text-base text-muted-foreground sm:text-lg">{t('json.string.subtitle')}</p>
           </div>
 
-          {/* Main Content */}
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Input */}
+          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
             <div>
               <JsonEditor
                 value={input}
                 onChange={setInput}
-                label="Input (JSON String)"
-                placeholder='Paste your JSON string here (e.g., {"name":"John","age":30})'
+                label={t('json.string.input')}
+                placeholder={t('json.string.placeholder-input')}
               />
             </div>
 
-            {/* Output */}
             <div>
-              <JsonEditor
-                value={output}
-                onChange={() => {}}
-                label="Pretty String Output"
-                placeholder="Output will appear here..."
-                readOnly={true}
+              <JsonHighlightedView
+                label={t('json.string.output')}
+                output={output}
+                placeholder={t('json.string.placeholder-output')}
+                downloadFileName="pretty-string-output.json"
               />
             </div>
           </div>
 
-          {/* Action Button */}
-          <div className="mt-8 flex gap-4">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
             <Button
               size="lg"
               onClick={handlePrettyString}
-              className="bg-gradient-to-r from-primary to-accent hover:opacity-90"
+              className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 sm:w-auto"
             >
-              Prettify String
+              {t('json.string.action')}
             </Button>
             <Button
               size="lg"
               variant="outline"
+              className="w-full sm:w-auto"
               onClick={() => {
                 setInput('')
                 setOutput('')
                 setError('')
               }}
             >
-              Clear All
+              {t('json.common.clear-all')}
             </Button>
           </div>
 
@@ -89,7 +83,7 @@ export default function JsonPrettyStringPage() {
             <div className="mt-6 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg flex gap-3">
               <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-red-800 dark:text-red-200">Error</p>
+                <p className="text-sm font-medium text-red-800 dark:text-red-200">{t('json.common.error')}</p>
                 <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
               </div>
             </div>
@@ -99,7 +93,7 @@ export default function JsonPrettyStringPage() {
           {output && !error && (
             <div className="mt-6 p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg flex gap-3">
               <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-green-700 dark:text-green-300">String prettified successfully!</p>
+              <p className="text-sm text-green-700 dark:text-green-300">{t('json.string.success')}</p>
             </div>
           )}
         </div>

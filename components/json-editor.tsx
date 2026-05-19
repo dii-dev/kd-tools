@@ -40,47 +40,48 @@ export function JsonEditor({ onChange, value, placeholder = 'Enter JSON here...'
   return (
     <div className="w-full">
       {label && <label className="block text-sm font-medium text-foreground mb-2">{label}</label>}
-      <div className="relative">
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          readOnly={readOnly}
-          className="w-full h-64 p-4 font-mono text-sm border border-border rounded-lg bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
-        <div className="absolute top-2 right-2 flex gap-2">
+      <div className="rounded-xl border border-border bg-background">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-b border-border px-3 py-2">
           {!readOnly && (
             <Button
               size="sm"
               variant="outline"
               onClick={handleClear}
-              className="h-8 w-8 p-0"
-              title="Clear"
+              className="h-8 px-2 sm:px-3"
+              title={t('json.common.clear')}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">{t('json.common.clear')}</span>
             </Button>
           )}
           <Button
             size="sm"
             variant="outline"
             onClick={handleCopy}
-            className="h-8 px-2"
-            title={copied ? 'Copied!' : 'Copy'}
+            className="h-8 px-2 sm:px-3"
+            title={copied ? t('json.common.copied') : t('json.common.copy')}
           >
-            <Copy className="h-4 w-4 mr-1" />
-            {copied ? 'Copied!' : 'Copy'}
+            <Copy className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">{copied ? t('json.common.copied') : t('json.common.copy')}</span>
           </Button>
           <Button
             size="sm"
             variant="outline"
             onClick={handleDownload}
-            className="h-8 px-2"
-            title="Download"
+            className="h-8 px-2 sm:px-3"
+            title={t('json.common.download')}
           >
-            <Download className="h-4 w-4 mr-1" />
-            Download
+            <Download className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">{t('json.common.download')}</span>
           </Button>
         </div>
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          readOnly={readOnly}
+          className="h-64 w-full resize-none rounded-b-xl border-0 bg-background p-3 font-mono text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:p-4"
+        />
       </div>
     </div>
   )
