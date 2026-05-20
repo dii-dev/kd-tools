@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    'KD Tools is a Khmer-first online toolkit for OCR document conversion, QR code generation and decoding, JSON pretty formatting, JSON minify, JSON diff compare, XML to JSON conversion, and SOAP to JSON conversion.',
+    'KD Tools is a Khmer-first online toolkit for OCR document conversion, QR code generation and decoding, JSON pretty formatting, JSON minify, diff compare for text files and folders, XML to JSON conversion, and SOAP to JSON conversion.',
   keywords: [
     'KD Tools',
     'Khmer tools',
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     'Image to PDF',
     'JSON formatter',
     'JSON minify',
-    'JSON diff',
+    'diff compare',
     'JSON pretty',
     'JSON string formatter',
     'XML to JSON',

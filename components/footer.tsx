@@ -15,7 +15,7 @@ export function Footer() {
   const jsonFeatures = [
     { href: "/tools/json-pretty", label: t('json.pretty.title') },
     { href: "/tools/json-format", label: t('json.format.title') },
-    { href: "/tools/json-diff", label: t('json.diff.title') },
+    { href: "/tools/diff-compare", label: t('json.diff.title') },
     { href: "/tools/json-string", label: t('json.string.title') },
   ]
   const quickLinks = [

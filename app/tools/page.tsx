@@ -14,7 +14,7 @@ export default function ToolsPage() {
         ? t('json.pretty.title')
         : tool.href === '/tools/json-string'
           ? t('json.string.title')
-        : tool.href === '/tools/json-diff'
+        : tool.href === '/tools/diff-compare'
             ? t('json.diff.title')
           : tool.href === '/tools/xml-to-json'
             ? t('xml.json.title')
@@ -26,7 +26,7 @@ export default function ToolsPage() {
         ? t('json.pretty.subtitle')
         : tool.href === '/tools/json-string'
           ? t('json.string.subtitle')
-        : tool.href === '/tools/json-diff'
+        : tool.href === '/tools/diff-compare'
             ? t('json.diff.subtitle')
           : tool.href === '/tools/xml-to-json'
             ? t('xml.json.subtitle')

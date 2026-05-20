@@ -5,7 +5,7 @@ import { createPageMetadata, SITE_NAME, SITE_URL } from '@/lib/seo'
 export const metadata: Metadata = createPageMetadata({
   title: 'OCR Converter, JSON Tools, and QR Code Generator',
   description:
-    'Use KD Tools to convert Word to PDF, PDF to Word, images to Word or PDF, format and compare JSON, convert XML or SOAP to JSON, and generate or decode QR codes online.',
+    'Use KD Tools to convert Word to PDF, PDF to Word, images to Word or PDF, format JSON, compare text files and folders, convert XML or SOAP to JSON, and generate or decode QR codes online.',
   path: '/',
   keywords: [
     'Khmer OCR',
@@ -14,7 +14,7 @@ export const metadata: Metadata = createPageMetadata({
     'Image to Word',
     'Image to PDF',
     'JSON tools',
-    'JSON diff',
+    'diff compare',
     'JSON formatter',
     'XML to JSON',
     'SOAP to JSON',
@@ -50,7 +50,7 @@ export default function Home() {
           'Image to PDF converter',
           'JSON Pretty formatter',
           'JSON Format and Minify tool',
-          'JSON Diff compare tool',
+          'Diff compare tool',
           'JSON Pretty String formatter',
           'XML to JSON converter',
           'SOAP to JSON converter',

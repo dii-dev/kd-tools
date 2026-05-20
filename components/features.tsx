@@ -2,17 +2,14 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FileText, ImageIcon, FileType, ArrowRightLeft, QrCode } from "lucide-react"
+import { FileText, ImageIcon, FileType, ArrowRightLeft } from "lucide-react"
 import { useState } from "react"
 import { Converter } from "@/components/converter"
-import { QRGenerator } from "@/components/qr-generator"
 import { useLanguage } from "@/lib/language-context"
 
 export function Features() {
   const { t } = useLanguage()
   const [converterOpen, setConverterOpen] = useState(false)
-  const [qrOpen, setQrOpen] = useState(false)
-  const [qrMode, setQrMode] = useState<"generate" | "decode">("generate")
   const [selectedType, setSelectedType] = useState<"word-to-pdf" | "pdf-to-word" | "image-to-word" | "image-to-pdf">(
     "word-to-pdf",
   )
@@ -54,25 +51,11 @@ export function Features() {
       bgColor: "bg-orange-500/10",
       category: "converter",
     },
-    {
-      icon: QrCode,
-      title: t('features.qr-tools'),
-      description: t('features.qr-tools-desc'),
-      type: "generate" as const,
-      color: "from-cyan-500 to-blue-500",
-      bgColor: "bg-cyan-500/10",
-      category: "qr",
-    },
   ]
 
   const handleTryNow = (feature: (typeof features)[0]) => {
-    if (feature.category === "converter") {
-      setSelectedType(feature.type as typeof selectedType)
-      setConverterOpen(true)
-    } else if (feature.category === "qr") {
-      setQrMode(feature.type as "generate" | "decode")
-      setQrOpen(true)
-    }
+    setSelectedType(feature.type as typeof selectedType)
+    setConverterOpen(true)
   }
 
   return (
@@ -91,7 +74,7 @@ export function Features() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
             {features.map((feature, index) => (
               <Card
                 key={index}
@@ -143,7 +126,6 @@ export function Features() {
       </section>
 
       <Converter isOpen={converterOpen} onClose={() => setConverterOpen(false)} initialType={selectedType} />
-      <QRGenerator isOpen={qrOpen} onClose={() => setQrOpen(false)} initialMode={qrMode} />
     </>
   )
 }

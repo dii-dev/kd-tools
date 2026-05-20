@@ -34,9 +34,9 @@ export const JSON_TOOLS: Tool[] = [
   },
   {
     icon: GitCompare,
-    title: "JSON Diff Compare",
-    description: "Compare two JSON objects and see all the differences",
-    href: "/tools/json-diff",
+    title: "Diff Compare",
+    description: "Compare text, files, and folders side by side",
+    href: "/tools/diff-compare",
     color: "from-green-500 to-emerald-500",
     bgColor: "bg-green-500/10",
   },
@@ -112,7 +112,7 @@ export const OCR_TOOLS: Tool[] = [
 export const JSON_TOOL_NAMES = {
   PRETTY: "json-pretty",
   STRING: "json-string",
-  DIFF: "json-diff",
+  DIFF: "diff-compare",
   FORMAT: "json-format",
   XML_TO_JSON: "xml-to-json",
   SOAP_TO_JSON: "soap-to-json",

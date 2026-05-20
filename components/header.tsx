@@ -14,7 +14,7 @@ function getJsonToolTranslation(toolHref: string, t: (key: any) => string) {
         ? t('json.pretty.title')
         : toolHref === '/tools/json-string'
           ? t('json.string.title')
-          : toolHref === '/tools/json-diff'
+          : toolHref === '/tools/diff-compare'
             ? t('json.diff.title')
             : toolHref === '/tools/xml-to-json'
               ? t('xml.json.title')
@@ -26,7 +26,7 @@ function getJsonToolTranslation(toolHref: string, t: (key: any) => string) {
         ? t('json.pretty.subtitle')
         : toolHref === '/tools/json-string'
           ? t('json.string.subtitle')
-          : toolHref === '/tools/json-diff'
+          : toolHref === '/tools/diff-compare'
             ? t('json.diff.subtitle')
             : toolHref === '/tools/xml-to-json'
               ? t('xml.json.subtitle')

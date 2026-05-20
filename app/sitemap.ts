@@ -7,7 +7,7 @@ const routes = [
   '/tools',
   '/tools/json-pretty',
   '/tools/json-string',
-  '/tools/json-diff',
+  '/tools/diff-compare',
   '/tools/json-format',
   '/tools/xml-to-json',
   '/tools/soap-to-json',
