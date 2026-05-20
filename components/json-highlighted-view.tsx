@@ -223,6 +223,28 @@ interface JsonHighlightedViewProps {
   downloadFileName?: string
 }
 
+export function JsonTreeView({
+  value,
+  placeholder,
+}: {
+  value: unknown | null
+  placeholder: string
+}) {
+  const handleCopyNode = async (nodeValue: unknown, inlineKey?: string) => {
+    await navigator.clipboard.writeText(serializeNodeValue(nodeValue, inlineKey))
+  }
+
+  return (
+    <div className="min-h-64 overflow-auto p-3 font-mono text-sm sm:p-4">
+      {value !== null ? (
+        <JsonNode value={value} onCopyNode={handleCopyNode} />
+      ) : (
+        <span className="text-muted-foreground">{placeholder}</span>
+      )}
+    </div>
+  )
+}
+
 export function JsonHighlightedView({
   label,
   output,
@@ -247,10 +269,6 @@ export function JsonHighlightedView({
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
-  }
-
-  const handleCopyNode = async (value: unknown, inlineKey?: string) => {
-    await navigator.clipboard.writeText(serializeNodeValue(value, inlineKey))
   }
 
   return (
@@ -279,13 +297,7 @@ export function JsonHighlightedView({
             <span className="hidden sm:inline">{t("json.common.download")}</span>
           </Button>
         </div>
-        <div className="min-h-64 overflow-auto p-3 font-mono text-sm sm:p-4">
-          {parsedOutput ? (
-            <JsonNode value={parsedOutput} onCopyNode={handleCopyNode} />
-          ) : (
-            <span className="text-muted-foreground">{placeholder}</span>
-          )}
-        </div>
+        <JsonTreeView value={parsedOutput} placeholder={placeholder} />
       </div>
     </div>
   )

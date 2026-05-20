@@ -103,7 +103,7 @@ export const OCR_TOOLS: Tool[] = [
     icon: QrCode,
     title: "QR Tools",
     description: "Generate QR codes from strings or decode QR images back into text",
-    href: "/",
+    href: "/qr",
     color: "from-cyan-500 to-blue-500",
     bgColor: "bg-cyan-500/10",
   },

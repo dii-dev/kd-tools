@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
             />
           </svg>
           <span className="text-sm font-medium">
-            {language === 'en' ? 'EN' : 'ខ'}
+            {language === 'en' ? 'EN' : 'ខ្មែរ'}
           </span>
         </Button>
       </DropdownMenuTrigger>

@@ -5,7 +5,7 @@ import { useLanguage } from "@/lib/language-context"
 import { BrandLogo } from "@/components/brand-logo"
 
 export function Footer() {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   const ocrFeatures = [
     { href: "/", label: t('features.word-to-pdf') },
     { href: "/", label: t('features.pdf-to-word') },
@@ -19,7 +19,7 @@ export function Footer() {
     { href: "/tools/json-string", label: t('json.string.title') },
   ]
   const quickLinks = [
-    { href: "/", label: t('features.qr-tools') },
+    { href: "/qr", label: t('features.qr-tools') },
     { href: "/tools", label: t('tools.title') },
     { href: "/#features", label: t('features.ocr-title') },
     { href: "/#how-it-works", label: t('how.title') },
@@ -30,9 +30,37 @@ export function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-1 dark:rounded-2xl dark:border dark:border-white/8 dark:bg-white/[0.03] dark:p-5">
-            <Link href="/" className="flex items-center gap-3 mb-4">
-              <BrandLogo className="shrink-0" iconClassName="p-2 h-auto" />
-              <span className="text-xl font-bold">KD Tools</span>
+            <Link href="/" className="group mb-4 flex min-w-0 items-center gap-3">
+              <div className="transition-transform duration-300 group-hover:scale-105">
+                <BrandLogo />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={[
+                      'block text-sm font-bold leading-tight text-foreground sm:text-lg',
+                      language === 'km' ? 'font-[family-name:var(--font-khmer)] sm:text-base' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    {t('header.brand-name')}
+                  </span>
+                  <span className="hidden rounded-full border border-primary/20 bg-primary/8 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-primary md:inline-flex">
+                    OCR
+                  </span>
+                </div>
+                <span
+                  className={[
+                    'block text-[11px] font-medium leading-snug text-muted-foreground sm:text-xs',
+                    language === 'km' ? 'font-[family-name:var(--font-khmer)]' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                >
+                  {t('header.brand-tag')}
+                </span>
+              </div>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t('footer.description')}

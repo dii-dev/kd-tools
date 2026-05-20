@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Kantumruy_Pro, Poppins } from 'next/font/google'
 import { RootClientWrapper } from '@/components/root-client-wrapper'
+import { SITE_NAME, SITE_URL } from '@/lib/seo'
 import './globals.css'
 
 const kantumruyPro = Kantumruy_Pro({
@@ -28,12 +29,37 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'KD Tools - OCR & Document Converter',
-  description: 'All-in-one tools platform: OCR tools (Word to PDF, PDF to Word, Image conversions), JSON converters (Pretty, Format, Diff, String), and QR code generator. Fast, accurate technology supporting Khmer and English.',
-  keywords: ['tools', 'OCR', 'document converter', 'PDF converter', 'JSON formatter', 'QR code generator', 'JSON diff', 'Khmer tools', 'online converter'],
-  authors: [{ name: 'KD Tools' }],
-  creator: 'KD Tools',
-  publisher: 'KD Tools',
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  title: {
+    default: 'KD Tools | OCR, JSON Tools, QR Code Generator',
+    template: `%s | ${SITE_NAME}`,
+  },
+  description:
+    'KD Tools is a Khmer-first online toolkit for OCR document conversion, QR code generation and decoding, JSON pretty formatting, JSON minify, JSON diff compare, XML to JSON conversion, and SOAP to JSON conversion.',
+  keywords: [
+    'KD Tools',
+    'Khmer tools',
+    'OCR tools',
+    'document converter',
+    'Word to PDF',
+    'PDF to Word',
+    'Image to Word',
+    'Image to PDF',
+    'JSON formatter',
+    'JSON minify',
+    'JSON diff',
+    'JSON pretty',
+    'JSON string formatter',
+    'XML to JSON',
+    'SOAP to JSON',
+    'QR code generator',
+    'QR code decoder',
+    'online converter',
+  ],
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   robots: {
     index: true,
     follow: true,
@@ -46,58 +72,41 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://kdocr.com',
-    languages: {
-      en: 'https://kdocr.com/en',
-      'km': 'https://kdocr.com/km',
-    },
+    canonical: SITE_URL,
   },
   openGraph: {
     type: 'website',
-    locale: 'en_US',
-    url: 'https://kdocr.com',
-    siteName: 'KD OCR',
-    title: 'KD OCR - Document Converter & QR Code Generator',
-    description: 'Convert documents and generate custom QR codes instantly with advanced OCR technology',
+    locale: 'km_KH',
+    alternateLocale: ['en_US'],
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: 'KD Tools | OCR, JSON Tools, QR Code Generator',
+    description:
+      'Khmer-first OCR document converters, JSON tools, XML and SOAP converters, and QR code generator and decoder for fast online workflows.',
     images: [
       {
-        url: 'https://kdocr.com/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'KD OCR - Document Conversion Tool',
-        type: 'image/png',
+        url: '/icon.svg',
+        alt: `${SITE_NAME} logo`,
+        type: 'image/svg+xml',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'KD OCR - Document Converter & QR Code Generator',
-    description: 'Convert documents between formats instantly with KD OCR',
-    creator: '@KDOCR',
-    images: ['https://kdocr.com/twitter-image.png'],
+    title: 'KD Tools | OCR, JSON Tools, QR Code Generator',
+    description: 'Online OCR converters, JSON tools, XML and SOAP converters, and QR code generator and decoder for Khmer and English workflows.',
+    images: ['/icon.svg'],
   },
-  manifest: '/manifest.json',
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-        sizes: '32x32',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-        sizes: '32x32',
-      },
       {
         url: '/icon.svg',
         type: 'image/svg+xml',
       },
     ],
-    apple: '/apple-icon.png',
-    shortcut: '/favicon.ico',
+    shortcut: '/icon.svg',
   },
-    generator: 'v0.app'
+  category: 'technology',
 }
 
 export default function RootLayout({

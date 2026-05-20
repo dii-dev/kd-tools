@@ -53,6 +53,10 @@ function parseFlexibleJsonInput(jsonString: string): unknown {
   throw lastError instanceof Error ? lastError : new Error("Invalid JSON")
 }
 
+export function parseJsonInput(jsonString: string): unknown {
+  return normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
+}
+
 function normalizeNestedJsonStrings(value: unknown): unknown {
   if (Array.isArray(value)) {
     return value.map((item) => normalizeNestedJsonStrings(item))
@@ -120,7 +124,7 @@ function minifyNestedJsonStringsByKey(value: unknown): unknown {
 
 export function jsonPretty(jsonString: string): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
+    const parsed = parseJsonInput(jsonString)
     const pretty = JSON.stringify(parsed, null, 2)
     return { result: pretty, error: null }
   } catch (err) {
@@ -140,7 +144,7 @@ export function jsonMinify(jsonString: string): { result: string; error: null } 
 
 export function jsonFormat(jsonString: string, indent: number = 2): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
+    const parsed = parseJsonInput(jsonString)
     const formatted = JSON.stringify(parsed, null, indent)
     return { result: formatted, error: null }
   } catch (err) {
@@ -150,7 +154,7 @@ export function jsonFormat(jsonString: string, indent: number = 2): { result: st
 
 export function jsonPrettyString(jsonString: string): { result: string; error: null } | { result: null; error: string } {
   try {
-    const parsed = normalizeNestedJsonStrings(parseFlexibleJsonInput(jsonString))
+    const parsed = parseJsonInput(jsonString)
     let result = ''
     const indent = (level: number) => '  '.repeat(level)
 
@@ -195,38 +199,381 @@ export function jsonPrettyString(jsonString: string): { result: string; error: n
   }
 }
 
-export function jsonDiff(json1: string, json2: string): { result: string; error: null } | { result: null; error: string } {
-  try {
-    const obj1 = normalizeNestedJsonStrings(parseFlexibleJsonInput(json1))
-    const obj2 = normalizeNestedJsonStrings(parseFlexibleJsonInput(json2))
+export interface JsonDiffRow {
+  leftLineNumber: number | null
+  rightLineNumber: number | null
+  leftContent: string
+  rightContent: string
+  leftType: 'unchanged' | 'removed' | 'modified' | 'empty'
+  rightType: 'unchanged' | 'added' | 'modified' | 'empty'
+  changeGroup: number | null
+  leftCursor: number
+  rightCursor: number
+}
 
-    const changes: string[] = []
+export interface JsonDiffResult {
+  left: string
+  right: string
+  rows: JsonDiffRow[]
+  changedRows: number
+}
 
-    function compareObjects(left: any, right: any, path: string = 'root'): void {
-      const allKeys = new Set([...Object.keys(left || {}), ...Object.keys(right || {})])
+function buildLcsMatrix(leftLines: string[], rightLines: string[]) {
+  const matrix = Array.from({ length: leftLines.length + 1 }, () => Array<number>(rightLines.length + 1).fill(0))
 
-      allKeys.forEach((key) => {
-        const leftVal = left?.[key]
-        const rightVal = right?.[key]
-        const currentPath = path ? `${path}.${key}` : key
+  for (let leftIndex = leftLines.length - 1; leftIndex >= 0; leftIndex -= 1) {
+    for (let rightIndex = rightLines.length - 1; rightIndex >= 0; rightIndex -= 1) {
+      if (leftLines[leftIndex] === rightLines[rightIndex]) {
+        matrix[leftIndex][rightIndex] = matrix[leftIndex + 1][rightIndex + 1] + 1
+      } else {
+        matrix[leftIndex][rightIndex] = Math.max(matrix[leftIndex + 1][rightIndex], matrix[leftIndex][rightIndex + 1])
+      }
+    }
+  }
 
-        if (JSON.stringify(leftVal) !== JSON.stringify(rightVal)) {
-          if (typeof leftVal === 'object' && typeof rightVal === 'object' && leftVal !== null && rightVal !== null) {
-            compareObjects(leftVal, rightVal, currentPath)
-          } else {
-            changes.push(`+ ${currentPath}: ${JSON.stringify(rightVal)}`)
-            if (leftVal !== undefined) {
-              changes.push(`- ${currentPath}: ${JSON.stringify(leftVal)}`)
-            }
-          }
-        }
+  return matrix
+}
+
+type DiffOperation =
+  | { type: 'unchanged'; leftContent: string; rightContent: string }
+  | { type: 'removed'; leftContent: string }
+  | { type: 'added'; rightContent: string }
+
+const SMALL_DIFF_CELL_LIMIT = 120_000
+
+function buildSmallDiffOperations(leftLines: string[], rightLines: string[]) {
+  const matrix = buildLcsMatrix(leftLines, rightLines)
+  const operations: DiffOperation[] = []
+
+  let leftIndex = 0
+  let rightIndex = 0
+
+  while (leftIndex < leftLines.length && rightIndex < rightLines.length) {
+    if (leftLines[leftIndex] === rightLines[rightIndex]) {
+      operations.push({
+        type: 'unchanged',
+        leftContent: leftLines[leftIndex],
+        rightContent: rightLines[rightIndex],
       })
+      leftIndex += 1
+      rightIndex += 1
+      continue
     }
 
-    compareObjects(obj1, obj2)
+    if (matrix[leftIndex + 1][rightIndex] >= matrix[leftIndex][rightIndex + 1]) {
+      operations.push({ type: 'removed', leftContent: leftLines[leftIndex] })
+      leftIndex += 1
+    } else {
+      operations.push({ type: 'added', rightContent: rightLines[rightIndex] })
+      rightIndex += 1
+    }
+  }
 
-    const result = changes.length > 0 ? changes.join('\n') : 'No differences found'
-    return { result, error: null }
+  while (leftIndex < leftLines.length) {
+    operations.push({ type: 'removed', leftContent: leftLines[leftIndex] })
+    leftIndex += 1
+  }
+
+  while (rightIndex < rightLines.length) {
+    operations.push({ type: 'added', rightContent: rightLines[rightIndex] })
+    rightIndex += 1
+  }
+
+  return operations
+}
+
+function longestIncreasingSubsequence(candidates: Array<{ left: number; right: number }>) {
+  if (candidates.length === 0) {
+    return []
+  }
+
+  const tails: number[] = []
+  const previous = new Array<number>(candidates.length).fill(-1)
+
+  for (let index = 0; index < candidates.length; index += 1) {
+    const right = candidates[index].right
+    let low = 0
+    let high = tails.length
+
+    while (low < high) {
+      const mid = Math.floor((low + high) / 2)
+      if (candidates[tails[mid]].right < right) {
+        low = mid + 1
+      } else {
+        high = mid
+      }
+    }
+
+    if (low > 0) {
+      previous[index] = tails[low - 1]
+    }
+
+    if (low === tails.length) {
+      tails.push(index)
+    } else {
+      tails[low] = index
+    }
+  }
+
+  const result: Array<{ left: number; right: number }> = []
+  let cursor = tails[tails.length - 1]
+
+  while (cursor !== undefined && cursor >= 0) {
+    result.push(candidates[cursor])
+    cursor = previous[cursor]
+  }
+
+  return result.reverse()
+}
+
+function findUniqueAnchors(
+  leftLines: string[],
+  leftStart: number,
+  leftEnd: number,
+  rightLines: string[],
+  rightStart: number,
+  rightEnd: number,
+) {
+  const leftCounts = new Map<string, { count: number; index: number }>()
+  const rightCounts = new Map<string, { count: number; index: number }>()
+
+  for (let index = leftStart; index < leftEnd; index += 1) {
+    const entry = leftCounts.get(leftLines[index])
+    if (entry) {
+      entry.count += 1
+    } else {
+      leftCounts.set(leftLines[index], { count: 1, index })
+    }
+  }
+
+  for (let index = rightStart; index < rightEnd; index += 1) {
+    const entry = rightCounts.get(rightLines[index])
+    if (entry) {
+      entry.count += 1
+    } else {
+      rightCounts.set(rightLines[index], { count: 1, index })
+    }
+  }
+
+  const candidates: Array<{ left: number; right: number }> = []
+
+  for (const [line, leftEntry] of leftCounts.entries()) {
+    const rightEntry = rightCounts.get(line)
+    if (leftEntry.count === 1 && rightEntry?.count === 1) {
+      candidates.push({ left: leftEntry.index, right: rightEntry.index })
+    }
+  }
+
+  candidates.sort((first, second) => first.left - second.left || first.right - second.right)
+  return longestIncreasingSubsequence(candidates)
+}
+
+function pushRangeOperations(
+  operations: DiffOperation[],
+  leftLines: string[],
+  leftStart: number,
+  leftEnd: number,
+  rightLines: string[],
+  rightStart: number,
+  rightEnd: number,
+) {
+  for (let index = leftStart; index < leftEnd; index += 1) {
+    operations.push({ type: 'removed', leftContent: leftLines[index] })
+  }
+
+  for (let index = rightStart; index < rightEnd; index += 1) {
+    operations.push({ type: 'added', rightContent: rightLines[index] })
+  }
+}
+
+function diffLineRanges(
+  leftLines: string[],
+  leftStart: number,
+  leftEnd: number,
+  rightLines: string[],
+  rightStart: number,
+  rightEnd: number,
+  operations: DiffOperation[],
+): void {
+  while (leftStart < leftEnd && rightStart < rightEnd && leftLines[leftStart] === rightLines[rightStart]) {
+    operations.push({
+      type: 'unchanged',
+      leftContent: leftLines[leftStart],
+      rightContent: rightLines[rightStart],
+    })
+    leftStart += 1
+    rightStart += 1
+  }
+
+  const suffix: DiffOperation[] = []
+  while (leftStart < leftEnd && rightStart < rightEnd && leftLines[leftEnd - 1] === rightLines[rightEnd - 1]) {
+    suffix.push({
+      type: 'unchanged',
+      leftContent: leftLines[leftEnd - 1],
+      rightContent: rightLines[rightEnd - 1],
+    })
+    leftEnd -= 1
+    rightEnd -= 1
+  }
+
+  if (leftStart === leftEnd || rightStart === rightEnd) {
+    pushRangeOperations(operations, leftLines, leftStart, leftEnd, rightLines, rightStart, rightEnd)
+    operations.push(...suffix.reverse())
+    return
+  }
+
+  const leftLength = leftEnd - leftStart
+  const rightLength = rightEnd - rightStart
+
+  if (leftLength * rightLength <= SMALL_DIFF_CELL_LIMIT) {
+    operations.push(...buildSmallDiffOperations(leftLines.slice(leftStart, leftEnd), rightLines.slice(rightStart, rightEnd)))
+    operations.push(...suffix.reverse())
+    return
+  }
+
+  const anchors = findUniqueAnchors(leftLines, leftStart, leftEnd, rightLines, rightStart, rightEnd)
+
+  if (anchors.length === 0) {
+    pushRangeOperations(operations, leftLines, leftStart, leftEnd, rightLines, rightStart, rightEnd)
+    operations.push(...suffix.reverse())
+    return
+  }
+
+  let currentLeft = leftStart
+  let currentRight = rightStart
+
+  for (const anchor of anchors) {
+    diffLineRanges(leftLines, currentLeft, anchor.left, rightLines, currentRight, anchor.right, operations)
+    operations.push({
+      type: 'unchanged',
+      leftContent: leftLines[anchor.left],
+      rightContent: rightLines[anchor.right],
+    })
+    currentLeft = anchor.left + 1
+    currentRight = anchor.right + 1
+  }
+
+  diffLineRanges(leftLines, currentLeft, leftEnd, rightLines, currentRight, rightEnd, operations)
+  operations.push(...suffix.reverse())
+}
+
+function buildRawDiffOperations(leftLines: string[], rightLines: string[]) {
+  const operations: DiffOperation[] = []
+  diffLineRanges(leftLines, 0, leftLines.length, rightLines, 0, rightLines.length, operations)
+  return operations
+}
+
+function buildJsonDiffRows(leftLines: string[], rightLines: string[]): JsonDiffRow[] {
+  const operations = buildRawDiffOperations(leftLines, rightLines)
+  const rows: JsonDiffRow[] = []
+  let leftLineNumber = 1
+  let rightLineNumber = 1
+  let index = 0
+  let changeGroup = 0
+
+  while (index < operations.length) {
+    const operation = operations[index]
+
+    if (operation.type === 'unchanged') {
+      rows.push({
+        leftLineNumber,
+        rightLineNumber,
+        leftContent: operation.leftContent,
+        rightContent: operation.rightContent,
+        leftType: 'unchanged',
+        rightType: 'unchanged',
+        changeGroup: null,
+        leftCursor: leftLineNumber - 1,
+        rightCursor: rightLineNumber - 1,
+      })
+      leftLineNumber += 1
+      rightLineNumber += 1
+      index += 1
+      continue
+    }
+
+    const removedBlock: string[] = []
+    const addedBlock: string[] = []
+
+    while (index < operations.length && operations[index].type !== 'unchanged') {
+      const current = operations[index]
+      if (current.type === 'removed') {
+        removedBlock.push(current.leftContent)
+      } else if (current.type === 'added') {
+        addedBlock.push(current.rightContent)
+      }
+      index += 1
+    }
+
+    changeGroup += 1
+    const sharedLength = Math.min(removedBlock.length, addedBlock.length)
+
+    for (let pairIndex = 0; pairIndex < sharedLength; pairIndex += 1) {
+      rows.push({
+        leftLineNumber,
+        rightLineNumber,
+        leftContent: removedBlock[pairIndex],
+        rightContent: addedBlock[pairIndex],
+        leftType: 'modified',
+        rightType: 'modified',
+        changeGroup,
+        leftCursor: leftLineNumber - 1,
+        rightCursor: rightLineNumber - 1,
+      })
+      leftLineNumber += 1
+      rightLineNumber += 1
+    }
+
+    for (let removedIndex = sharedLength; removedIndex < removedBlock.length; removedIndex += 1) {
+      rows.push({
+        leftLineNumber,
+        rightLineNumber: null,
+        leftContent: removedBlock[removedIndex],
+        rightContent: '',
+        leftType: 'removed',
+        rightType: 'empty',
+        changeGroup,
+        leftCursor: leftLineNumber - 1,
+        rightCursor: rightLineNumber - 1,
+      })
+      leftLineNumber += 1
+    }
+
+    for (let addedIndex = sharedLength; addedIndex < addedBlock.length; addedIndex += 1) {
+      rows.push({
+        leftLineNumber: null,
+        rightLineNumber,
+        leftContent: '',
+        rightContent: addedBlock[addedIndex],
+        leftType: 'empty',
+        rightType: 'added',
+        changeGroup,
+        leftCursor: leftLineNumber - 1,
+        rightCursor: rightLineNumber - 1,
+      })
+      rightLineNumber += 1
+    }
+  }
+
+  return rows
+}
+
+export function jsonDiff(json1: string, json2: string): { result: JsonDiffResult; error: null } | { result: null; error: string } {
+  try {
+    const left = json1.replace(/\r\n/g, '\n')
+    const right = json2.replace(/\r\n/g, '\n')
+    const rows = buildJsonDiffRows(left.split('\n'), right.split('\n'))
+    const changedRows = rows.filter((row) => row.changeGroup !== null).length
+
+    return {
+      result: {
+        left,
+        right,
+        rows,
+        changedRows,
+      },
+      error: null,
+    }
   } catch (err) {
     return { result: null, error: err instanceof Error ? err.message : 'Invalid JSON' }
   }

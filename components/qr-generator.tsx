@@ -35,7 +35,7 @@ type BarcodeDetectorCtor = {
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 
-export function QRGenerator({ isOpen, onClose, initialMode = "generate" }: QRGeneratorProps) {
+export function QRGenerator({ isOpen, onClose, initialMode = "generate", embedded = false }: QRGeneratorProps) {
   const { language, t } = useLanguage()
   const [mode, setMode] = useState<QRMode>(initialMode)
   const [textInput, setTextInput] = useState("")
@@ -56,14 +56,16 @@ export function QRGenerator({ isOpen, onClose, initialMode = "generate" }: QRGen
   const [error, setError] = useState("")
   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    if (isOpen) {
-      setMode(initialMode)
-    }
-  }, [initialMode, isOpen])
+  const visible = embedded || isOpen
 
   useEffect(() => {
-    if (!isOpen) return
+    if (visible) {
+      setMode(initialMode)
+    }
+  }, [initialMode, visible])
+
+  useEffect(() => {
+    if (!visible) return
 
     const handlePaste = (event: ClipboardEvent) => {
       const imageItem = Array.from(event.clipboardData?.items || []).find((item) =>
@@ -87,10 +89,10 @@ export function QRGenerator({ isOpen, onClose, initialMode = "generate" }: QRGen
 
     window.addEventListener("paste", handlePaste)
     return () => window.removeEventListener("paste", handlePaste)
-  }, [isOpen, mode])
+  }, [visible, mode])
 
   useEffect(() => {
-    if (!isOpen || mode !== "generate") return
+    if (!visible || mode !== "generate") return
 
     if (!textInput.trim()) {
       resetOutput()
@@ -150,9 +152,9 @@ export function QRGenerator({ isOpen, onClose, initialMode = "generate" }: QRGen
       cancelled = true
       window.clearTimeout(timeoutId)
     }
-  }, [isOpen, mode, textInput, darkColor, lightColor, frameColor, frameStyle, logoFile, language, t])
+  }, [visible, mode, textInput, darkColor, lightColor, frameColor, frameStyle, logoFile, language, t])
 
-  if (!isOpen) return null
+  if (!visible) return null
 
   const modeCards = [
     {
@@ -328,16 +330,31 @@ export function QRGenerator({ isOpen, onClose, initialMode = "generate" }: QRGen
   const canSubmit = mode === "generate" ? Boolean(textInput.trim()) : Boolean(qrFile)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm animate-in fade-in duration-200 sm:p-4">
-      <Card className="max-h-[92vh] w-full max-w-3xl overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-200">
+    <div
+      className={cn(
+        embedded
+          ? "w-full"
+          : "fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm animate-in fade-in duration-200 sm:p-4",
+      )}
+    >
+      <Card
+        className={cn(
+          "w-full max-w-3xl overflow-y-auto",
+          embedded
+            ? "border-border/70 shadow-sm"
+            : "max-h-[92vh] shadow-2xl animate-in zoom-in-95 duration-200",
+        )}
+      >
         <div className="p-4 sm:p-6 md:p-8">
           <div className="mb-4 sm:mb-6 flex items-center justify-between">
             <h2 className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-xl font-bold text-transparent sm:text-2xl">
               {t("qr.title")}
             </h2>
-            <Button variant="ghost" size="icon" onClick={onClose} className="shrink-0 hover:bg-destructive/10">
-              <X className="h-5 w-5" />
-            </Button>
+            {!embedded ? (
+              <Button variant="ghost" size="icon" onClick={onClose} className="shrink-0 hover:bg-destructive/10">
+                <X className="h-5 w-5" />
+              </Button>
+            ) : null}
           </div>
 
           <div className="mb-6 grid gap-3 md:grid-cols-2">

@@ -24,6 +24,7 @@ export interface QRGeneratorProps {
   isOpen: boolean
   onClose: () => void
   initialMode?: 'generate' | 'decode'
+  embedded?: boolean
 }
 
 // JSON Editor Types
